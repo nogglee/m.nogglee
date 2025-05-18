@@ -9,49 +9,69 @@ export async function Start()
 	const target_url = location.href;
 
 	if (isInApp) {
-		if (/kakaotalk/i.test(ua) || /threads/i.test(ua)) {
-			location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(target_url);
-			return;
+		if (/kakaotalk/i.test(ua) || /threads/i.test(ua)) { location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(target_url); return; }
+		else if (/line/i.test(ua)) { location.href = target_url + (target_url.includes('?') ? '&' : '?') + 'openExternalBrowser=1'; return; }
+		else {
+			if (/android/i.test(ua)) { location.href = 'intent://' + target_url.replace(/https?:\/\//i, '') + '#Intent;scheme=http;package=com.android.chrome;end'; }
+			else { return; }
 		}
-		if (/line/i.test(ua)) {
-			location.href = target_url + (target_url.includes('?') ? '&' : '?') + 'openExternalBrowser=1';
-			return;
-		} else {
-			return;
-		}
-	} else if (!isMobile) {
+	} 
+	else if (!isMobile) {
 		location.href = 'https://nogglee.com' + location.pathname + location.search + location.hash;
 		return;
 	}
 
+	const headerSection = document.getElementById('header_section');
+	if (headerSection && !headerSection.querySelector('header-component')) {
+		const headerEl = document.createElement('header-component');
+		headerSection.appendChild(headerEl);
+	}
+
 	await loadPagePart('landing', document.getElementById('content'));
+
+	const footerSection = document.getElementById('footer_section');
+	if (footerSection && !footerSection.querySelector('footer-component')) {
+		const footerEl = document.createElement('footer-component');
+		footerSection.appendChild(footerEl);
+	}
+
 	await renderSelectedPreviews(TEMPLATE_DATA, '#preview_template .grid', [1, 2, 3]);
 	await renderSelectedPreviews(PORTFOLIO_DATA, '#preview_portfolio .grid', [1, 2, 3, 4, 5, 6]);
 
 	const form = document.getElementById('contact_form');
 	if (!form) return;
 
-	emailjs.init('YV7YzVSbiOXcul-mG'); // 📌 복사한 public key 사용
+	emailjs.init(window.EMAILJS.PUBLIC_KEY);
 
 	form.addEventListener('submit', function (e) {
 		e.preventDefault();
 
-		emailjs.sendForm('service_yjixszn', 'template_44zyocm', this)
+		emailjs.sendForm(
+			window.EMAILJS.SERVICE_ID,
+			window.EMAILJS.TEMPLATE_ID,
+			this
+		)
 			.then(() => {
-				alert('문의가 성공적으로 전송되었습니다!');
+				navigator.clipboard.writeText(`${form.message.value}`)
+				alert('문의해 주셔서 감사합니다.\n빠르게 검토 후 답변 드리겠습니다!');
 				form.reset();
 			}, (error) => {
 				console.error('전송 실패:', error);
-				alert('전송 중 오류가 발생했습니다.');
+				navigator.clipboard.writeText(`${form.message.value}`).then(() => {
+					alert('오류가 발생하여 문의내용을 클립보드에 복사했습니다.\n이메일로 직접 연락 주시면 감사하겠습니다.');
+				}).catch(err => {
+					console.error('클립보드 복사 실패:', err);
+				});
 			});
 	});
 
-	// Re-bind .cta_button click handlers after landing content is loaded
 	document.querySelectorAll('.cta_button').forEach((ThisButton) => {
 		ThisButton.onclick = () => {
 			document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
 		};
 	});
+
+
 }
 
 // data
@@ -89,7 +109,7 @@ const TEMPLATE_DATA = [
 const PORTFOLIO_DATA = [
 	{
 		id: 1,
-		title: '시장 조사 기반의 IR 문서 작성',
+		title: 'IR 및 제안서 작성',
 		description: '시장과 경쟁사를 분석하고, 투자자 관점에서 매력적으로 보이도록 IR 문서를 기획·작성했습니다.',
 		type: 'plans',
 		link: 'https://www.notion.com/ko/templates/pm',
@@ -98,7 +118,7 @@ const PORTFOLIO_DATA = [
 	},
 	{
 		id: 2,
-		title: '자동화된 주간보고 시스템 구축',
+		title: '주간보고 시스템 구축',
 		description: '담당자가 날짜 계산 없이도 리포트를 작성할 수 있도록 자동화된 주차 계산 로직을 데이터베이스에 적용했습니다.',
 		type: 'tools',
 		link: '#',
@@ -116,7 +136,7 @@ const PORTFOLIO_DATA = [
 	},
 	{
 		id: 4,
-		title: '노션 / 구글시트 자동 연동',
+		title: '노션/구글시트 연동',
 		description: '보안 이슈로 인해 노션 사용이 어려운 고객사를 위해, 데이터를 자동 전송하는 구글시트 연동 시스템을 구축했습니다.',
 		type: 'tools',
 		link: '#',
@@ -125,7 +145,7 @@ const PORTFOLIO_DATA = [
 	},
 	{
 		id: 5,
-		title: '흐름 중심의 서비스 기획',
+		title: '사용자 중심 서비스 기획',
 		description: '스토리보드와 플로우차트를 기반으로, 사용자 흐름과 기능 정의를 명확히 정리했습니다.',
 		type: 'plans',
 		link: '#',
@@ -428,32 +448,14 @@ function renderSelectedPreviews(DATA_NAME, selector, ids) {
 		element.className = 'grid_item';
 		element.onclick = () => window.open(item.link, '_blank');
 		element.innerHTML = `
-			<img src="${item.image}" alt="${item.title}" />
-			<div class="grid_content">
-				<p class="description_sm"><strong>${item.title}</strong></p>
-				<p class="caption">${item.description}</p>
+			<div class="grid_item_inner">
+				<img src="${item.image}" alt="${item.title}" />
+				<div class="grid_content">
+					<p class="description_sm"><strong>${item.title}</strong></p>
+					<p class="caption">${item.description}</p>
+				</div>
 			</div>
 		`;
 		grid.appendChild(element);
-	});
-}
-
-function sendEmail() {
-	const form = document.getElementById('contact_form');
-	if (!form) return;
-
-	emailjs.init('YV7YzVSbiOXcul-mG'); // 📌 복사한 public key 사용
-
-	form.addEventListener('submit', function (e) {
-		e.preventDefault();
-
-		emailjs.sendForm('service_yjixszn', 'template_44zyocm', this)
-			.then(() => {
-				alert('문의가 성공적으로 전송되었습니다!');
-				form.reset();
-			}, (error) => {
-				console.error('전송 실패:', error);
-				alert('전송 중 오류가 발생했습니다.');
-			});
 	});
 }
