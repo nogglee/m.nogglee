@@ -4,12 +4,12 @@ export async function Start()
 {
 
 	const ua = navigator.userAgent.toLowerCase();
-	const isInApp = /(kakaotalk|line|instagram|naver|everytime|electron|daum|fb_iab|fb4a|fbios|fban|whatsapp|band|zumapp|aliapp|whale|trill|snapchat|samsungbrowser)/i.test(ua);
+	const isInApp = /(kakaotalk|threads|line|instagram|naver|everytime|electron|daum|fb_iab|fb4a|fbios|fban|whatsapp|band|zumapp|aliapp|whale|trill|snapchat|samsungbrowser)/i.test(ua);
 	const isMobile = /iphone|ipod|android|mobi|mobile/.test(ua);
 	const target_url = location.href;
 
 	if (isInApp) {
-		if (/kakaotalk/i.test(ua)) {
+		if (/kakaotalk/i.test(ua) || /threads/i.test(ua)) {
 			location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(target_url);
 			return;
 		}
