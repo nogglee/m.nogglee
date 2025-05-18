@@ -2,7 +2,23 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export async function Start() 
 {
-	await loadPagePart('landing', document.getElementById('content'));
+	async function loadLandingPageWithMobileRedirect(targetElement) {
+		const ua = navigator.userAgent.toLowerCase();
+		const isInApp = /(kakaotalk|line|instagram|naver|everytime|electron|daum|fb_iab|fb4a|fbios|fban|whatsapp|band|zumapp|aliapp|whale|trill|snapchat|samsungbrowser)/i.test(ua);
+		const target_url = location.href;
+
+		if (isInApp) {
+			if (/kakaotalk/i.test(ua)) {
+				location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(target_url);
+				return;
+			}
+			if (/line/i.test(ua)) {
+				location.href = target_url + (target_url.includes('?') ? '&' : '?') + 'openExternalBrowser=1';
+				return;
+			}
+		}
+	}
+	await loadLandingPageWithMobileRedirect(document.getElementById('content'));
 	await renderSelectedPreviews(TEMPLATE_DATA, '#preview_template .grid', [1, 2, 3]);
 	await renderSelectedPreviews(PORTFOLIO_DATA, '#preview_portfolio .grid', [1, 2, 3, 4, 5, 6]);
 
@@ -25,14 +41,11 @@ export async function Start()
 	});
 
 	// Re-bind .cta_button click handlers after landing content is loaded
-
 	document.querySelectorAll('.cta_button').forEach((ThisButton) => {
 		ThisButton.onclick = () => {
 			document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
 		};
 	});
-
-
 }
 
 // data
