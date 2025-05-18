@@ -1,4 +1,8 @@
 html {
+height: 100%;
+	margin: 0;
+	padding: 0;
+	background-color: #272520;
 	scroll-behavior: smooth;
 }
 body {
@@ -7,6 +11,7 @@ body {
     background-color: #272520;
     height: 100%;
 	margin: 0;
+	padding: 0;
 }
 button {
 	cursor: pointer;
