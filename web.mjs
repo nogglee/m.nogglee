@@ -5,6 +5,8 @@ export async function Start()
 
 	const ua = navigator.userAgent.toLowerCase();
 	const isInApp = /(kakaotalk|line|instagram|naver|everytime|electron|daum|fb_iab|fb4a|fbios|fban|whatsapp|band|zumapp|aliapp|whale|trill|snapchat|samsungbrowser)/i.test(ua);
+	const isMobile = /iphone|ipod|android|mobi|mobile/.test(ua);
+	const isAlreadyOnPC = location.hostname.startsWith('nogglee.com') || location.hostname === 'nogglee.com';
 	const target_url = location.href;
 
 	if (isInApp) {
@@ -16,6 +18,11 @@ export async function Start()
 			location.href = target_url + (target_url.includes('?') ? '&' : '?') + 'openExternalBrowser=1';
 			return;
 		}
+	}
+
+	if (isMobile && !isAlreadyOnPC) {
+		location.replace('https://nogglee.com' + location.pathname + location.search + location.hash);
+		return;
 	}
 
 	await loadPagePart('landing', document.getElementById('content'));
