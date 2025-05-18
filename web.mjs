@@ -18,9 +18,7 @@ export async function Start()
 			location.href = target_url + (target_url.includes('?') ? '&' : '?') + 'openExternalBrowser=1';
 			return;
 		}
-	}
-
-	if (isMobile && !isAlreadyOnPC) {
+	} else if (isMobile && !isAlreadyOnPC) {
 		location.replace('https://nogglee.com' + location.pathname + location.search + location.hash);
 		return;
 	}
