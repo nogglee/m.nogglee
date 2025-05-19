@@ -18,7 +18,7 @@ button {
 	border: none;
 }
 .wrap {
-	padding: 0px 5%;
+	padding: 0px 16px;
 }
 #contact_form select {
 	appearance: none;
