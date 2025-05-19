@@ -100,6 +100,39 @@ export async function Start()
 			ctaButton.style.display = '';
 		}
 	});
+
+	const buttonSubs = document.querySelectorAll('.button_sub');
+	buttonSubs.forEach(button => {
+		button.page = button.dataset.page;
+		button.onclick = async () => {
+			const page = button.page;
+			await loadPagePart(page, document.getElementById('content'));
+
+			if (page === 'portfoliolist') {
+				const waitForComponent = async () => {
+					const component = document.querySelector('portfolio-card-component');
+					if (component && typeof component.filterCards === 'function') {
+						await component.ready;
+						component.filterCards('all');
+					} else {
+						setTimeout(waitForComponent, 10);
+					}
+				};
+				waitForComponent();
+			} else if (page === 'templatelist') {
+				const waitForComponent = async () => {
+					const component = document.querySelector('template-card-component');
+					if (component && typeof component.filterCards === 'function') {
+						await component.ready;
+						component.filterCards('all');
+					} else {
+						setTimeout(waitForComponent, 10);
+					}
+				};
+				waitForComponent();
+			}
+		};
+	});
 }
 
 // data
