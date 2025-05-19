@@ -464,18 +464,36 @@ customElements.define('portfolio-card-component', PortfolioCardComponent);
 
 // functions
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-async function loadPagePart(pagePartName, targetElement) {
-	try {
+async function loadPagePart(pagePartName, targetElement, addHistory = true) {
+	try
+	{
 		const html = await (await fetch(`/m/${pagePartName}.html`)).text();
 		targetElement.innerHTML = html;
+
+		if (addHistory) { history.pushState({ page: pagePartName }, '', `#${pagePartName}`); }
 	}
-	catch {
+	catch
+	{
 		targetElement.innerHTML = `<p style="color:red">${pagePartName} 로딩 실패</p>`;
 	}
 }
 
+window.addEventListener('popstate', async (event) => {
+	const state = event.state;
+	const content = document.getElementById('content');
+
+	if (state?.page === 'landing') {
+		await Start();
+	} else if (state?.page) {
+		await loadPagePart(state.page, content, false);
+	} else {
+		await Start();
+	}
+});
+
 async function loadTemplate(pagePartName, templateId, targetElement) {
-	try {
+	try
+	{
 		const html = await (await fetch(`/m/${pagePartName}.html`)).text();
 
 		const container = document.createElement('div');
@@ -492,7 +510,8 @@ async function loadTemplate(pagePartName, templateId, targetElement) {
 			return false;
 		}
 	}
-	catch {
+	catch
+	{
 		targetElement.innerHTML = `<p style="color:red">${pagePartName} 로딩 실패</p>`;
 		return false;
 	}
