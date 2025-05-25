@@ -498,21 +498,19 @@ class ModalComponent extends HTMLElement {
 		modal.querySelector('#modal_title').textContent = item.title;
 		modal.querySelector('#modal_description').innerHTML = item.description;
 		const link = modal.querySelector('#modal_link');
-		// const link = modal.querySelector('#modal_link');
-		// if (originType === 'template') {
-		// 	link.style.display = 'block';
-		// 	link.setAttribute('href', item.link || '#');
-		// 	link.textContent = '템플릿 바로가기';
-		// } else if (originType === 'portfolio') {
-		// 	if (item.link && item.link.trim() !== '') {
-		// 		link.style.display = 'block';
-		// 		link.setAttribute('href', item.link);
-		// 		link.textContent = '서비스 바로가기';
-		// 	} else {
-		// 		link.style.display = 'none';
-		// 		link.textContent = '';
-		// 	}
-		// }
+		link.style.display = 'none';
+
+		if (originType === 'template') {
+			link.setAttribute('href', item.link);
+			link.textContent = '템플릿 바로가기';
+			link.style.display = 'block';
+		} else if (originType === 'portfolio') {
+			if (item.link && item.link.trim() !== '') {
+				link.setAttribute('href', item.link);
+				link.textContent = '서비스 바로가기';
+				link.style.display = 'block';
+			}
+		}
 		modal.querySelector('#modal_content').innerHTML = item.content ?? '';
 
 		const iframe = modal.querySelector('#modal_video');
