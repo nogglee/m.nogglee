@@ -497,31 +497,21 @@ class ModalComponent extends HTMLElement {
 		document.body.style.overflow = 'hidden';
 		modal.querySelector('#modal_title').textContent = item.title;
 		modal.querySelector('#modal_description').innerHTML = item.description;
-		// const link = modal.querySelector('#modal_link');
-		// link.style.display = 'none';
+		const link = modal.querySelector('#modal_link');
+		link.style.display = 'none';
 
-		// if (originType === 'template') {
-		// 	link.setAttribute('href', item.link);
-		// 	link.textContent = '템플릿 바로가기';
-		// 	link.style.display = 'block';
-		// } else if (originType === 'portfolio') {
-		// 	if (item.link && item.link.trim() !== '') {
-		// 		link.setAttribute('href', item.link);
-		// 		link.textContent = '서비스 바로가기';
-		// 		link.style.display = 'block';
-		// 	}
-		// }
-		const modalContent = modal.querySelector('#modal_content');
-		modalContent.innerHTML = '';
-		const wrapper = document.createElement('div');
-		wrapper.className = 'safari_safe_wrapper';
-		try {
-			wrapper.innerHTML = item.content || '';
-		} catch (e) {
-			console.error('[Modal] item.content parse error:', e);
-			wrapper.innerHTML = '<p>내용을 불러오지 못했습니다.</p>';
+		if (originType === 'template') {
+			link.setAttribute('href', item.link);
+			link.textContent = '템플릿 바로가기';
+			link.style.display = 'block';
+		} else if (originType === 'portfolio') {
+			if (item.link && item.link.trim() !== '') {
+				link.setAttribute('href', item.link);
+				link.textContent = '서비스 바로가기';
+				link.style.display = 'block';
+			}
 		}
-		modalContent.appendChild(wrapper);
+		modal.querySelector('#modal_content').innerHTML = item.content ?? '';
 
 		const iframe = modal.querySelector('#modal_video');
 		const img = modal.querySelector('#modal_image');
