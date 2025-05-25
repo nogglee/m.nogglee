@@ -512,25 +512,12 @@ class ModalComponent extends HTMLElement {
 				link.style.display = 'block';
 			}
 		}
-		// SAFARI image reload workaround: force DOM re-eval for images
-		const modalContentEl = modal.querySelector('#modal_content');
-		if (modalContentEl) {
-			modalContentEl.innerHTML = '';
-			const container = document.createElement('div');
-			container.innerHTML = item.content || '';
-
-			// Force reassign all img src to trigger load
-			container.querySelectorAll('img').forEach(img => {
-				const originalSrc = img.getAttribute('src');
-				if (originalSrc) {
-					img.removeAttribute('loading'); // remove lazy-loading if any
-					img.src = ''; // reset
-					img.src = originalSrc; // re-apply
-				}
-			});
-			modalContentEl.appendChild(container);
-		}
-
+		const container = modal.querySelector('#modal_content');
+		container.innerHTML = item.content || '';
+		container.querySelectorAll('img').forEach(img => {
+			const src = img.getAttribute('src');
+			if (src) img.src = src; // 강제로 다시 트리거
+		});
 
 		const iframe = modal.querySelector('#modal_video');
 		const img = modal.querySelector('#modal_image');
