@@ -21,12 +21,6 @@ export async function Start()
 		return;
 	}
 
-	if (!document.querySelector('modal-component')) {
-		const modalComponent = document.createElement('modal-component');
-		document.body.appendChild(modalComponent);
-		await modalComponent.ready;
-	}
-
 	const headerSection = document.getElementById('header_section');
 	if (headerSection && !headerSection.querySelector('header-component')) {
 		const headerEl = document.createElement('header-component');
@@ -154,6 +148,12 @@ export async function Start()
 			};
 		}
 	});
+
+	if (!document.querySelector('modal-component')) {
+		const modalComponent = document.createElement('modal-component');
+		document.body.appendChild(modalComponent);
+		await modalComponent.ready;
+	}
 }
 
 // data
