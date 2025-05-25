@@ -1,3 +1,6 @@
+html, body {
+	overflow-x: hidden;
+}
 html {
 	height: 100%;
 	margin: 0;
@@ -166,6 +169,7 @@ strong {
 	align-items: flex-end;
 	background-color: rgba(0, 0, 0, 0.7);
 	z-index: 20000;
+	isolation: isolate;
 }
 
 .modal.show {
@@ -185,6 +189,7 @@ strong {
 	flex-direction: column;
 	margin: 0;
 	overflow-y: auto;
+	z-index: 21000;
 }
 
 .modal_close_bar {
