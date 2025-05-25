@@ -124,29 +124,6 @@ export async function Start()
 				}
 			};
 			waitForComponent();
-			// if (page === 'portfoliolist') {
-			// 	const waitForComponent = async () => {
-			// 		const component = document.querySelector('card-component');
-			// 		if (component && typeof component.filterCards === 'function') {
-			// 			await component.ready;
-			// 			component.filterCards('all');
-			// 		} else {
-			// 			setTimeout(waitForComponent, 10);
-			// 		}
-			// 	};
-			// 	waitForComponent();
-			// } else if (page === 'templatelist') {
-			// 	const waitForComponent = async () => {
-			// 		const component = document.querySelector('template-card-component');
-			// 		if (component && typeof component.filterCards === 'function') {
-			// 			await component.ready;
-			// 			component.filterCards('all');
-			// 		} else {
-			// 			setTimeout(waitForComponent, 10);
-			// 		}
-			// 	};
-			// 	waitForComponent();
-			// }
 		};
 	});
 
@@ -485,6 +462,9 @@ class ModalComponent extends HTMLElement {
 		const success = await loadTemplate('modal', 'modal-component', this);
 		if (!success) return;
 		this.modal = this.querySelector('#modal');
+		if (this.modal && this.modal.parentNode !== document.body) {
+			document.body.appendChild(this.modal);
+		}
 		this.modal.querySelector('.modal_close').addEventListener('click', () => {
 			this.modal.classList.remove('show');
 			document.body.style.overflow = '';
