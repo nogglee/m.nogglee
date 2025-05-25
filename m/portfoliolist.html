@@ -2,6 +2,50 @@
 	.caption {
 		font-size: 0.8rem;
 	}
+
+.filter_menu {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.filter_menu button {
+	gap: 0.5rem;
+	font-size: 0.8rem;
+	font-weight: 400;
+	line-height: 1;
+	position: relative;
+	border: none;
+	background-color: transparent;
+	color: #ffffff99;
+	padding: 0.5rem 0.5rem;
+	cursor: pointer;
+	transition: color 0.3s ease;
+}
+
+.filter_menu button::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 2px;
+	background-color: #ffc83d;
+	transform: scaleX(0);
+	transform-origin: bottom left;
+	transition: transform 0.3s ease;
+}
+
+.filter_menu button:hover {
+	color: #fff;
+}
+
+.filter_menu button.active {
+	color: #fff;
+}
+
+.filter_menu button.active::after {
+	transform: scaleX(1);
+}
 </style>
 
 <div class="wrap">
