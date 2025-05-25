@@ -497,6 +497,7 @@ class ModalComponent extends HTMLElement {
 		document.body.style.overflow = 'hidden';
 		modal.querySelector('#modal_title').textContent = item.title;
 		modal.querySelector('#modal_description').innerHTML = item.description;
+		const link = modal.querySelector('#modal_link');
 		// const link = modal.querySelector('#modal_link');
 		// if (originType === 'template') {
 		// 	link.style.display = 'block';
