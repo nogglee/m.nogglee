@@ -494,6 +494,7 @@ class ModalComponent extends HTMLElement {
 	showModal(item, originType) {
 		const modal = this.modal;
 		modal.classList.add('show');
+		modal.scrollTop = 0;
 		document.body.style.overflow = 'hidden';
 		modal.querySelector('#modal_title').textContent = item.title;
 		modal.querySelector('#modal_description').innerHTML = item.description;
