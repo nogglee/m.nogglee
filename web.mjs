@@ -511,7 +511,8 @@ class ModalComponent extends HTMLElement {
 		// 		link.style.display = 'block';
 		// 	}
 		// }
-		modal.querySelector('#modal_content').innerHTML = item.content ?? '';
+		const modalContent = modal.querySelector('#modal_content');
+		modalContent.innerHTML = `<div class="safe_wrapper">${item.content ?? ''}</div>`;
 
 		const iframe = modal.querySelector('#modal_video');
 		const img = modal.querySelector('#modal_image');
