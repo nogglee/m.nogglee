@@ -493,8 +493,6 @@ class ModalComponent extends HTMLElement {
 
 	showModal(item, originType) {
 		const modal = this.modal;
-		console.log('[DEBUG] originType:', originType);
-		console.log('[DEBUG] item.link:', item.link);
 		modal.querySelector('#modal_title').textContent = item.title;
 		modal.querySelector('#modal_description').innerHTML = item.description;
 		const link = modal.querySelector('#modal_link');
@@ -513,6 +511,12 @@ class ModalComponent extends HTMLElement {
 			}
 		}
 		modal.querySelector('#modal_content').innerHTML = item.content ?? '';
+		modal.querySelector('#modal_content').insertAdjacentHTML('beforeend', item.content || '');
+
+		modal.querySelectorAll('#modal_content img').forEach(img => {
+			const src = img.getAttribute('src');
+			if (src) img.src = src;
+		});
 
 		const iframe = modal.querySelector('#modal_video');
 		const img = modal.querySelector('#modal_image');
