@@ -1,5 +1,11 @@
 <template id="modal-component">
 	<style>
+		@supports (padding: max(0px)) {
+			.modal_content {
+				padding-top: max(env(safe-area-inset-top), 1rem);
+				padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+			}
+		}
 		.modal {
 			position: fixed;
 			bottom: 0;
@@ -12,6 +18,8 @@
 			background-color: rgba(0, 0, 0, 0.7);
 			z-index: 20000;
 			isolation: isolate;
+			padding-top: env(safe-area-inset-top);
+			padding-bottom: env(safe-area-inset-bottom);
 		}
 	
 		.modal.show {
@@ -32,6 +40,10 @@
 			overflow-y: auto;
 			overflow-x: hidden;
 			z-index: 21000;
+			padding-top: calc(env(safe-area-inset-top) + 1rem);
+			padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+			height: calc(100vh - env(safe-area-inset-top));
+			box-sizing: border-box;
 		}
 	
 		.modal_close_bar {
