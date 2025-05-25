@@ -512,12 +512,7 @@ class ModalComponent extends HTMLElement {
 				link.style.display = 'block';
 			}
 		}
-		const container = modal.querySelector('#modal_content');
-		container.innerHTML = item.content || '';
-		container.querySelectorAll('img').forEach(img => {
-			const src = img.getAttribute('src');
-			if (src) img.src = src; // 강제로 다시 트리거
-		});
+		modal.querySelector('#modal_content').innerHTML = item.content ?? '';
 
 		const iframe = modal.querySelector('#modal_video');
 		const img = modal.querySelector('#modal_image');
