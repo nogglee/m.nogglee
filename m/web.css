@@ -337,14 +337,6 @@ strong {
 	max-width: 280px;
 }
 
-/* .grid_item:hover .grid_item_inner {
-	background-color: #161512;
-}
-
-.grid_item:hover {
-	border-radius: 24px;
-} */
-
 .grid_content {
 	margin-top: 1rem;
 	width: 100%;
@@ -360,12 +352,6 @@ strong {
 .grid_item .caption {
 	max-width: 100%;
 	box-sizing: border-box;
-}
-
-lottie-player {
-	width: 100%;
-	height: 6rem;
-	margin-top: 4%;
 }
 
 .filter_menu {
