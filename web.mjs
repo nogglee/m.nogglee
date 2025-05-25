@@ -275,6 +275,59 @@ const PORTFOLIO_DATA = [
 
 // classes
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class CardComponent extends HTMLElement {
+	constructor() {
+		super();
+		this.ready = this.init();
+	}
+
+	async init() {
+		const success = await loadTemplate('carditem', 'card-component', this);
+		if (!success) return;
+
+		this.listContainer = this.parentElement;
+		const cardTemplate = this.listContainer.querySelector('.grid_item');
+		if (!cardTemplate) return;
+
+		this.listContainer.innerHTML = '';
+
+		const DATA = this.getAttribute('data-type') === 'template' ? TEMPLATE_DATA : PORTFOLIO_DATA;
+
+		DATA.forEach(item => {
+			const card = cardTemplate.cloneNode(true);
+			card.querySelector('.grid_item_image').src = item.image;
+			card.querySelector('.description_sm strong').textContent = item.title;
+			card.querySelector('.caption').textContent = item.description;
+			card.dataset.type = item.type;
+			const originType = this.getAttribute('data-type');
+			card.onclick = async () => {
+				const modalComponent = document.querySelector('modal-component');
+				await modalComponent.ready;
+				modalComponent.showModal(item, originType);
+			};
+			this.listContainer.appendChild(card);
+		});
+
+		this.ownerDocument.querySelectorAll('[data-filter]').forEach(btn => {
+			btn.addEventListener('click', () => {
+				this.filterCards(btn.dataset.filter);
+			});
+		});
+	}
+
+	filterCards(filter) {
+		const cards = this.listContainer.querySelectorAll('.grid_item');
+		cards.forEach(card => {
+			const type = card.dataset.type;
+			card.style.display = (filter === 'all' || type === filter) ? 'block' : 'none';
+		});
+		this.ownerDocument.querySelectorAll('[data-filter]').forEach(btn => {
+			btn.classList.toggle('active', btn.dataset.filter === filter);
+		});
+	}
+}
+customElements.define('card-component', CardComponent);
+
 class FooterComponent extends HTMLElement
 {
 	constructor()
@@ -399,59 +452,6 @@ class HeaderComponent extends HTMLElement
 }
 customElements.define('header-component', HeaderComponent);
 
-class CardComponent extends HTMLElement {
-	constructor() {
-		super();
-		this.ready = this.init();
-	}
-
-	async init() {
-		const success = await loadTemplate('carditem', 'card-component', this);
-		if (!success) return;
-
-		this.listContainer = this.parentElement;
-		const cardTemplate = this.listContainer.querySelector('.grid_item');
-		if (!cardTemplate) return;
-
-		this.listContainer.innerHTML = '';
-
-		const DATA = this.getAttribute('data-type') === 'template' ? TEMPLATE_DATA : PORTFOLIO_DATA;
-
-		DATA.forEach(item => {
-			const card = cardTemplate.cloneNode(true);
-			card.querySelector('.grid_item_image').src = item.image;
-			card.querySelector('.description_sm strong').textContent = item.title;
-			card.querySelector('.caption').textContent = item.description;
-			card.dataset.type = item.type;
-			const originType = this.getAttribute('data-type');
-			card.onclick = async () => {
-				const modalComponent = document.querySelector('modal-component');
-				await modalComponent.ready;
-				modalComponent.showModal(item, originType);
-			};
-			this.listContainer.appendChild(card);
-		});
-
-		this.ownerDocument.querySelectorAll('[data-filter]').forEach(btn => {
-			btn.addEventListener('click', () => {
-				this.filterCards(btn.dataset.filter);
-			});
-		});
-	}
-
-	filterCards(filter) {
-		const cards = this.listContainer.querySelectorAll('.grid_item');
-		cards.forEach(card => {
-			const type = card.dataset.type;
-			card.style.display = (filter === 'all' || type === filter) ? 'block' : 'none';
-		});
-		this.ownerDocument.querySelectorAll('[data-filter]').forEach(btn => {
-			btn.classList.toggle('active', btn.dataset.filter === filter);
-		});
-	}
-}
-customElements.define('card-component', CardComponent);
-
 class ModalComponent extends HTMLElement {
 	constructor() {
 		super();
@@ -536,6 +536,19 @@ customElements.define('modal-component', ModalComponent);
 
 // functions
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+window.addEventListener('popstate', async (event) => {
+	const state = event.state;
+	const content = document.getElementById('content');
+
+	if (state?.page === 'landing') {
+		await Start();
+	} else if (state?.page) {
+		await loadPagePart(state.page, content, false);
+	} else {
+		await Start();
+	}
+});
+
 async function loadPagePart(pagePartName, targetElement, addHistory = true) {
 	try
 	{
@@ -564,19 +577,6 @@ async function loadPagePart(pagePartName, targetElement, addHistory = true) {
 		targetElement.innerHTML = `<p style="color:red">${pagePartName} 로딩 실패</p>`;
 	}
 }
-
-window.addEventListener('popstate', async (event) => {
-	const state = event.state;
-	const content = document.getElementById('content');
-
-	if (state?.page === 'landing') {
-		await Start();
-	} else if (state?.page) {
-		await loadPagePart(state.page, content, false);
-	} else {
-		await Start();
-	}
-});
 
 async function loadTemplate(pagePartName, templateId, targetElement) {
 	try
