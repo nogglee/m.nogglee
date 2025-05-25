@@ -461,26 +461,34 @@ class ModalComponent extends HTMLElement {
 	async init() {
 		const success = await loadTemplate('modal', 'modal-component', this);
 		if (!success) return;
-		this.modal = this.querySelector('#modal');
-		if (this.modal && this.modal.parentNode !== document.body) {
-			document.body.appendChild(this.modal);
-		}
-		this.modal.querySelector('.modal_close').addEventListener('click', () => {
-			this.modal.classList.remove('show');
-			document.body.style.overflow = '';
-		});
-		window.addEventListener('keydown', (e) => {
-			if (e.key === 'Escape') {
-				this.modal?.classList.remove('show');
-				document.body.style.overflow = '';
+
+		const waitForModal = async () => {
+			this.modal = this.querySelector('#modal');
+			if (!this.modal) {
+				setTimeout(waitForModal, 10);
+				return;
 			}
-		});
-		this.modal.addEventListener('click', (e) => {
-			if (e.target === this.modal) {
+			if (this.modal && this.modal.parentNode !== document.body) {
+				document.body.appendChild(this.modal);
+			}
+			this.modal.querySelector('.modal_close').addEventListener('click', () => {
 				this.modal.classList.remove('show');
 				document.body.style.overflow = '';
-			}
-		});
+			});
+			window.addEventListener('keydown', (e) => {
+				if (e.key === 'Escape') {
+					this.modal?.classList.remove('show');
+					document.body.style.overflow = '';
+				}
+			});
+			this.modal.addEventListener('click', (e) => {
+				if (e.target === this.modal) {
+					this.modal.classList.remove('show');
+					document.body.style.overflow = '';
+				}
+			});
+		}
+		waitForModal();
 	}
 
 	showModal(item, originType) {
@@ -490,7 +498,6 @@ class ModalComponent extends HTMLElement {
 		modal.querySelector('#modal_title').textContent = item.title;
 		modal.querySelector('#modal_description').innerHTML = item.description;
 		const link = modal.querySelector('#modal_link');
-		// Updated conditional logic for link rendering
 		if (originType === 'template') {
 			link.style.display = 'block';
 			link.setAttribute('href', item.link || '#');

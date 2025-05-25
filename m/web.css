@@ -203,7 +203,7 @@ strong {
 }
 
 .modal_close {
-	font-size: 3rem;
+	font-size: 2rem;
 	background: none;
 	line-height: 1;
 	border: none;
@@ -212,6 +212,7 @@ strong {
 
 .modal_body {
 	display: flex;
+	flex-direction: column;
 	gap: 2rem;
 	flex-wrap: wrap;
 }
@@ -322,7 +323,7 @@ strong {
 	flex-direction: column;
 	width: 100%;
 	text-align: left;
-	align-items: flex-start;
+	align-items: center;
 	cursor: pointer;
 }
 
