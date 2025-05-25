@@ -512,7 +512,16 @@ class ModalComponent extends HTMLElement {
 		// 	}
 		// }
 		const modalContent = modal.querySelector('#modal_content');
-		modalContent.innerHTML = `<div class="safe_wrapper">${item.content ?? ''}</div>`;
+		modalContent.innerHTML = '';
+		const wrapper = document.createElement('div');
+		wrapper.className = 'safari_safe_wrapper';
+		try {
+			wrapper.innerHTML = item.content || '';
+		} catch (e) {
+			console.error('[Modal] item.content parse error:', e);
+			wrapper.innerHTML = '<p>내용을 불러오지 못했습니다.</p>';
+		}
+		modalContent.appendChild(wrapper);
 
 		const iframe = modal.querySelector('#modal_video');
 		const img = modal.querySelector('#modal_image');
