@@ -494,7 +494,10 @@ class ModalComponent extends HTMLElement {
 	showModal(item, originType) {
 		const modal = this.modal;
 		modal.classList.add('show');
-		modal.scrollTop = 0;
+		const modalContent = modal.querySelector('.modal_content');
+		if (modalContent) {
+			modalContent.scrollTop = 0;
+		}
 		document.body.style.overflow = 'hidden';
 		modal.querySelector('#modal_title').textContent = item.title;
 		modal.querySelector('#modal_description').innerHTML = item.description;
@@ -527,8 +530,6 @@ class ModalComponent extends HTMLElement {
 			img.src = item.image;
 			img.style.display = 'block';
 		}
-
-
 	}
 }
 customElements.define('modal-component', ModalComponent);
