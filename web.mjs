@@ -107,7 +107,7 @@ export async function Start()
 		}
 	});
 
-	const buttonSubs = document.querySelectorAll('.button_sub');
+	const buttonSubs = document.querySelectorAll('.sub_page');
 	buttonSubs.forEach(button => {
 		button.page = button.dataset.page;
 		button.onclick = async () => {
