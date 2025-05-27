@@ -95,8 +95,8 @@ export async function Start()
 		button.page = button.dataset.page;
 		button.onclick = async () => {
 			const page = button.page;
-			window.scrollTo({ top: 0, behavior: 'auto' });
 			await loadPagePart(page, document.getElementById('content'));
+			window.scrollTo({ top: 0, behavior: 'auto' });
 
 
 			const waitForComponent = async () => {
@@ -460,7 +460,10 @@ async function loadPagePart(pagePartName, targetElement, addHistory = true) {
 			window.scrollTo({ top: 0, behavior: 'auto' });
 		}
 
-		if (addHistory) { history.pushState({ page: pagePartName }, '', `#${pagePartName}`); }
+		const allowHistoryPages = ['about', 'portfoliolist', 'templatelist'];
+		if (addHistory && allowHistoryPages.includes(pagePartName)) {
+			history.pushState({ page: pagePartName }, '', `#${pagePartName}`);
+		}
 	}
 	catch
 	{
