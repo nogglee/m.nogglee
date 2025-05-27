@@ -88,16 +88,22 @@ export async function Start()
 			ctaButton.style.display = 'none';
 		};
 	}
+
+	document.querySelector('.wrap')?.addEventListener('scroll', () => {
+		console.log('wrap scroll detected');
+	});
 	document.addEventListener('scroll', () => {
-		if (!ctaButton) return;
+		document.querySelector('.cta_button').style.display = 'none';
+		const btn = document.querySelector('.cta_button');
+		if (!btn) return;
 		const scrollY = window.scrollY || window.pageYOffset;
 		const windowHeight = window.innerHeight;
 		const bodyHeight = document.body.scrollHeight;
 
 		if (scrollY + windowHeight >= bodyHeight - 800) {
-			ctaButton.style.display = 'none';
+			btn.style.display = 'none';
 		} else {
-			ctaButton.style.display = '';
+			btn.style.display = '';
 		}
 	});
 
@@ -297,7 +303,6 @@ class CardComponent extends HTMLElement {
 			const card = cardTemplate.cloneNode(true);
 			card.querySelector('.grid_item_image').src = item.image;
 			card.querySelector('.description_sm strong').textContent = item.title;
-			card.querySelector('.caption').textContent = item.description;
 			card.dataset.type = item.type;
 			const originType = this.getAttribute('data-type');
 			card.onclick = async () => {
@@ -625,9 +630,8 @@ function renderSelectedPreviews(DATA_NAME, selector, ids, type) {
 				<img src="${item.image}" alt="${item.title}" />
 				<div class="grid_content">
 					<p class="description_sm"><strong>${item.title}</strong></p>
-					<p class="caption">${item.description}</p>
 				</div>
-				<button class="button_sub">자세히보기</button>
+				<div class="button_sub">자세히보기</div>
 			</div>
 		`;
 		grid.appendChild(element);
