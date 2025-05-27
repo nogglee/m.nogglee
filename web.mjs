@@ -523,19 +523,18 @@ function renderSelectedPreviews(DATA_NAME, selector, ids, type) {
 	});
 }
 
-// Ensure scroll handler is always registered, even before Start() completes
 window.addEventListener('scroll', () => {
 	console.log('scroll detected');
-	const btn = document.querySelector('.cta_button');
-	if (!btn) return;
+	const ctaButton = document.querySelector('.cta_button');
+	if (!ctaButton) return;
 
 	const scrollY = window.scrollY || document.documentElement.scrollTop;
 	const windowHeight = window.innerHeight;
 	const bodyHeight = document.documentElement.scrollHeight;
 
 	if (scrollY + windowHeight >= bodyHeight - 800) {
-		btn.style.display = 'none';
+		ctaButton.style.display = 'none';
 	} else {
-		btn.style.display = '';
+		ctaButton.style.display = '';
 	}
 });
