@@ -89,23 +89,6 @@ export async function Start()
 		};
 	}
 
-	document.querySelector('.wrap')?.addEventListener('scroll', () => {
-		console.log('wrap scroll detected');
-	});
-	document.addEventListener('scroll', () => {
-		document.querySelector('.cta_button').style.display = 'none';
-		const btn = document.querySelector('.cta_button');
-		if (!btn) return;
-		const scrollY = window.scrollY || window.pageYOffset;
-		const windowHeight = window.innerHeight;
-		const bodyHeight = document.body.scrollHeight;
-
-		if (scrollY + windowHeight >= bodyHeight - 800) {
-			btn.style.display = 'none';
-		} else {
-			btn.style.display = '';
-		}
-	});
 
 	const buttonSubs = document.querySelectorAll('.sub_page');
 	buttonSubs.forEach(button => {
@@ -113,6 +96,7 @@ export async function Start()
 		button.onclick = async () => {
 			const page = button.page;
 			await loadPagePart(page, document.getElementById('content'));
+			window.scrollTo({ top: 0, behavior: 'smooth' });
 
 			const waitForComponent = async () => {
 				const component = document.querySelector('card-component');
@@ -478,19 +462,8 @@ class ModalComponent extends HTMLElement {
 			}
 			this.modal.querySelector('.modal_close').addEventListener('click', () => {
 				this.modal.classList.remove('show');
+				this.modal.querySelector('.modal_content').scrollTop = 0;
 				document.body.style.overflow = '';
-			});
-			window.addEventListener('keydown', (e) => {
-				if (e.key === 'Escape') {
-					this.modal?.classList.remove('show');
-					document.body.style.overflow = '';
-				}
-			});
-			this.modal.addEventListener('click', (e) => {
-				if (e.target === this.modal) {
-					this.modal.classList.remove('show');
-					document.body.style.overflow = '';
-				}
 			});
 		}
 		waitForModal();
@@ -637,3 +610,20 @@ function renderSelectedPreviews(DATA_NAME, selector, ids, type) {
 		grid.appendChild(element);
 	});
 }
+
+// Ensure scroll handler is always registered, even before Start() completes
+window.addEventListener('scroll', () => {
+	console.log('scroll detected');
+	const btn = document.querySelector('.cta_button');
+	if (!btn) return;
+
+	const scrollY = window.scrollY || document.documentElement.scrollTop;
+	const windowHeight = window.innerHeight;
+	const bodyHeight = document.documentElement.scrollHeight;
+
+	if (scrollY + windowHeight >= bodyHeight - 800) {
+		btn.style.display = 'none';
+	} else {
+		btn.style.display = '';
+	}
+});
