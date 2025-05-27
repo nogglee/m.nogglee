@@ -627,6 +627,7 @@ function renderSelectedPreviews(DATA_NAME, selector, ids, type) {
 					<p class="description_sm"><strong>${item.title}</strong></p>
 					<p class="caption">${item.description}</p>
 				</div>
+				<button class="button_sub">자세히보기</button>
 			</div>
 		`;
 		grid.appendChild(element);
