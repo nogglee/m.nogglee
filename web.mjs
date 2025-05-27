@@ -426,17 +426,21 @@ customElements.define('modal-component', ModalComponent);
 
 // functions
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-window.addEventListener('popstate', async (event) => {
-	const state = event.state;
-	const content = document.getElementById('content');
+// window.addEventListener('popstate', async (event) => {
+// 	const state = event.state;
+// 	const content = document.getElementById('content');
 
-	if (state?.page === 'landing') {
-		await Start();
-	} else if (state?.page) {
-		await loadPagePart(state.page, content, false);
-	} else {
-		await Start();
-	}
+// 	if (state?.page === 'landing') {
+// 		await Start();
+// 	} else if (state?.page) {
+// 		await loadPagePart(state.page, content, false);
+// 	} else {
+// 		await Start();
+// 	}
+// });
+window.addEventListener('hashchange', () => {
+	const page = location.hash.replace('#', '') || 'landing';
+	loadPagePart(page, document.getElementById('content'));
 });
 
 async function loadPagePart(pagePartName, targetElement, addHistory = true) {
