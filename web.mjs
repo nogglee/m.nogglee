@@ -95,10 +95,9 @@ export async function Start()
 		button.page = button.dataset.page;
 		button.onclick = async () => {
 			const page = button.page;
+			window.scrollTo({ top: 0, behavior: 'auto' });
 			await loadPagePart(page, document.getElementById('content'));
-			setTimeout(() => {
-				window.scrollTo({ top: 0, behavior: 'auto' });
-			}, 50);
+
 
 			const waitForComponent = async () => {
 				const component = document.querySelector('card-component');
