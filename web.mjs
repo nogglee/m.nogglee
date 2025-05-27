@@ -96,8 +96,9 @@ export async function Start()
 		button.onclick = async () => {
 			const page = button.page;
 			await loadPagePart(page, document.getElementById('content'));
-			const aboutPage = document.querySelector('.about_wrap');
-			aboutPage?.scrollTo({ top: -500, behavior: 'smooth' });
+			setTimeout(() => {
+				window.scrollTo({ top: 0, behavior: 'auto' });
+			}, 50);
 
 			const waitForComponent = async () => {
 				const component = document.querySelector('card-component');
