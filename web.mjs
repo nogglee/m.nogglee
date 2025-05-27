@@ -96,7 +96,7 @@ export async function Start()
 		button.onclick = async () => {
 			const page = button.page;
 			await loadPagePart(page, document.getElementById('content'));
-			window.scrollTo({ top: 0, behavior: 'smooth' });
+			window.scrollTo({ top: -200, behavior: 'smooth' });
 
 			const waitForComponent = async () => {
 				const component = document.querySelector('card-component');
@@ -332,7 +332,7 @@ class FooterComponent extends HTMLElement
 
 		this.querySelector('#github').addEventListener('click', () => window.open('https://github.com/nogglee', '_blank'));
 		this.querySelector('#velog').addEventListener('click', () => window.open('https://velog.io/@nogglee/posts', '_blank'));
-		this.querySelector('#email').addEventListener('click', () => window.location.href = 'mailto:dev@nogglee.com?subject=문의&body=협업은 언제든지 환영합니다! 문의할 내용을 작성해 주세요.');
+		this.querySelector('#email').addEventListener('click', () => window.location.href = 'mailto:hello@nogglee.com?subject=문의&body=협업은 언제든지 환영합니다! 문의할 내용을 작성해 주세요.');
 	}
 }
 customElements.define('footer-component', FooterComponent);
@@ -350,93 +350,6 @@ class HeaderComponent extends HTMLElement
 		if (!success) return;
 		
 		this.querySelector('#logo').addEventListener('click', () => Start());
-
-		this.querySelectorAll('.nav_items').forEach(item => {
-			const mainMenu = item.dataset.name;
-			if (mainMenu === 'contact') {
-				item.addEventListener('click', async () => {
-					await Start();
-					setTimeout(() => {
-						window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-					}, 100);
-				});
-			}
-			else if (mainMenu) 
-			{
-				item.addEventListener('click', async (e) => {
-					if (e.target.closest('.sub_nav_items')) return;
-					
-					await loadPagePart(`${mainMenu}`, document.getElementById('content'));
-					if (mainMenu === 'templatelist') 
-					{
-						const waitForComponent = async () => {
-							const component = document.querySelector('template-card-component');
-							if (component && typeof component.filterCards === 'function') 
-							{
-								await component.ready;
-								component.filterCards('all');
-							}
-							else
-							{
-								setTimeout(waitForComponent, 10);
-							}
-						};
-						waitForComponent();
-					}
-					else if (mainMenu === 'portfoliolist') {
-						const waitForComponent = async () => {
-							const component = document.querySelector('portfolio-card-component');
-							if (component && typeof component.filterCards === 'function') {
-								await component.ready;
-								component.filterCards('all');
-							}
-							else {
-								setTimeout(waitForComponent, 10);
-							}
-						};
-						waitForComponent();
-					}
-				});
-			} 
-		});
-
-		this.querySelectorAll('.sub_nav_items').forEach(item => {
-			const filterType = item.dataset.name;
-			if (filterType) 
-			{
-				item.addEventListener('click', async (e) => {
-					const pageType = item.closest('.nav_items').dataset.name;
-					if (pageType === 'templatelist') {
-						await loadPagePart(pageType, document.getElementById('content'));
-						const waitForComponent = async () => {
-							const template_component = document.querySelector('template-card-component');
-							if (template_component && typeof template_component.filterCards === 'function' && filterType) {
-								await template_component.ready;
-								template_component.filterCards(filterType);
-							}
-							else {
-								setTimeout(waitForComponent, 10);
-							}
-						};
-						waitForComponent();
-					}
-					else if (pageType === 'portfoliolist') {
-						await loadPagePart(pageType, document.getElementById('content'));
-						const waitForComponent = async () => {
-							const portfolio_component = document.querySelector('portfolio-card-component');
-							if (portfolio_component && typeof portfolio_component.filterCards === 'function' && filterType) {
-								await portfolio_component.ready;
-								portfolio_component.filterCards(filterType);
-							}
-							else {
-								setTimeout(waitForComponent, 10);
-							}
-						};
-						waitForComponent();
-					}
-				});
-			}
-		});
 	}
 }
 customElements.define('header-component', HeaderComponent);
