@@ -96,7 +96,7 @@ export async function Start()
 		button.onclick = async () => {
 			const page = button.page;
 			await loadPagePart(page, document.getElementById('content'));
-			window.scrollTo({ top: -200, behavior: 'smooth' });
+			window.scrollTo({ top: -500, behavior: 'smooth' });
 
 			const waitForComponent = async () => {
 				const component = document.querySelector('card-component');
@@ -226,7 +226,7 @@ const PORTFOLIO_DATA = [
 		id: 4,
 		title: '노션 / 구글시트 연동',
 		description: '보안 이슈로 인해 노션 사용이 어려운 고객사를 위해, 데이터를 자동 전송하는 구글시트 연동 시스템을 구축했습니다.',
-		content: '<strong>프로젝트 개요</strong><br>내부 보안 정책으로 인해 노션 사용이 어려운 고객사를 위해,<br>노션과 구글시트를 양방향으로 연동하여 입력한 데이터를 기반으로<br>타임라인 생성 자동화 기능까지 구현했습니다.<br><img src="/m/a/p/4-1.png"><img src="/m/a/p/4-2.png"><img src="/m/a/p/4-3.png"><img src="/m/a/p/4-4.png"><br><strong>주요 기능</strong><br><ul><li><b>노션 → 구글시트 데이터 전송</b><br>노션 데이터베이스의 데이터를 추출하여 구글시트에 맞춘 포맷으로 자동 삽입합니다.</li><li><b>구글시트 → 노션 데이터 전송</b><br>구글시트에서 입력한 데이터를 스크립트 실행으로 노션 데이터베이스에 자동 삽입합니다.</li><li><b>타임라인 생성 자동화</b><br>타임라인 생성을 위한 스크립트를 구글시트에 추가하여 자동으로 타임라인을 생성합니다.</li><li><b>특정 시간 자동 업데이트</b><br>특정 시간에 자동으로 노션 데이터베이스의 데이터를 업데이트합니다.</li><li><b>노션 하위 데이터베이스 접근</b><br>API를 사용하여 노션 데이터베이스의 페이지 내부 콘텐츠를 업데이트 할 수 있고,<br>노션 데이터베이스의 하위 페이지를 접근하여 파일 업로드를 실행합니다.</li></ul>',
+		content: '<strong>프로젝트 개요</strong><br>내부 보안 정책으로 인해 노션 사용이 어려운 고객사를 위해,노션과 구글시트를 양방향으로 연동하여 입력한 데이터를 기반으로 타임라인 생성 자동화 기능까지 구현했습니다.<br><img src="/m/a/p/4-1.png"><img src="/m/a/p/4-2.png"><img src="/m/a/p/4-3.png"><img src="/m/a/p/4-4.png"><br><strong>주요 기능</strong><br><ul><li><b>노션 → 구글시트 데이터 전송</b><br>노션 데이터베이스의 데이터를 추출하여 구글시트에 맞춘 포맷으로 자동 삽입합니다.</li><li><b>구글시트 → 노션 데이터 전송</b><br>구글시트에서 입력한 데이터를 스크립트 실행으로 노션 데이터베이스에 자동 삽입합니다.</li><li><b>타임라인 생성 자동화</b><br>타임라인 생성을 위한 스크립트를 구글시트에 추가하여 자동으로 타임라인을 생성합니다.</li><li><b>특정 시간 자동 업데이트</b><br>특정 시간에 자동으로 노션 데이터베이스의 데이터를 업데이트합니다.</li><li><b>노션 하위 데이터베이스 접근</b><br>API를 사용하여 노션 데이터베이스의 페이지 내부 콘텐츠를 업데이트 할 수 있고,<br>노션 데이터베이스의 하위 페이지를 접근하여 파일 업로드를 실행합니다.</li></ul>',
 		type: 'tools',
 		link: '',
 		video: '',
@@ -385,10 +385,8 @@ class ModalComponent extends HTMLElement {
 	showModal(item, originType) {
 		const modal = this.modal;
 		modal.classList.add('show');
-		const modalContent = modal.querySelector('.modal_content');
-		if (modalContent) {
-			modalContent.scrollTop = 0;
-		}
+		const modalBody = modal.querySelector('.modal_body');
+		modalBody.scrollTop = 0;
 		document.body.style.overflow = 'hidden';
 		modal.querySelector('#modal_title').textContent = item.title;
 		modal.querySelector('#modal_description').innerHTML = item.description;
