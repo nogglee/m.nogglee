@@ -35,7 +35,7 @@ export async function Start()
 		footerSection.appendChild(footerEl);
 	}
 
-	await renderSelectedPreviews(TEMPLATE_DATA, '#preview_template .grid', [1, 5, 3], 'template');
+	await renderSelectedPreviews(TEMPLATE_DATA, '#preview_template .grid', [1, 5, 6], 'template');
 	await renderSelectedPreviews(PORTFOLIO_DATA, '#preview_portfolio .grid', [1, 2, 3, 4, 5, 6], 'portfolio');
 
 	const form = document.getElementById('contact_form');
